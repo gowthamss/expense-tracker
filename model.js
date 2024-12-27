@@ -11,3 +11,21 @@ export const validFlagsSet = new Set([
     'description',
     'amount'
 ]);
+
+export const expenseCategories = new Set([
+    'FOOD',
+    'GROCERIES',
+    'TRANSPORTATION',
+    'ENTERTAINMENT',
+    'HEALTH',
+    'INSURANCE',
+    'EDUCATION',
+    'UTILITIES',
+    'RENT',
+    'SUBSCRIPTIONS',
+    'CLOTHING',
+    'GIFTS',
+    'DONATIONS',
+    'DEBT',
+    'OTHER'
+]);
