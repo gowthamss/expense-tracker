@@ -9,7 +9,7 @@ export const validateExpenseName = (name) => {
 };
 
 export const validateExpenseId = (id) => {
-    if (typeof id !== 'number' || id <= 0) {
+    if (typeof parseInt(id) !== 'number' || parseInt(id) <= 0) {
         returnError('Expense ID must be a positive number');
     }
 };
