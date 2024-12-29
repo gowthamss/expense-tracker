@@ -22,7 +22,7 @@ program.command('add')
     .action((options) => {
         validateExpenseName(options.description);
         validateAmount(options.amount);
-
+        validateExpenseCategory(options.category);
         // Check if the file exists, if not create it
         fs.access(fileName, fs.constants.F_OK, (err) => {
             if (err && err.code === 'ENOENT') {
@@ -61,12 +61,14 @@ program.command('add')
 program.command('update')
     .description('Update an existing expense')
     .requiredOption('-i, --id <id>', 'ID of the expense')
-    .requiredOption('-d, --description <description>', 'Description of the expense')
-    .requiredOption('-a, --amount <amount>', 'Amount of the expense')
+    .option('-d, --description <description>', 'Description of the expense')
+    .option('-a, --amount <amount>', 'Amount of the expense')
+    .option('-c, --category <category>', 'Category of the expense')
     .action((options) => {
         validateExpenseId(options.id);
         validateExpenseName(options.description);
         validateAmount(options.amount);
+        validateExpenseCategory(options.category);
 
         // Read the file and parse the JSON content
         const expenses = getExpenses();
@@ -78,9 +80,9 @@ program.command('update')
         if (expenseIndex === -1) {
             returnError(`Expense with ID ${options.id} not found`);
         } else {
-            expenseToUpdate['description'] = options.description;
-            expenseToUpdate['amount'] = options.amount;
-            expenseToUpdate['category'] = options.category;
+            expenseToUpdate['description'] = options.description || expenseToUpdate['description'];
+            expenseToUpdate['amount'] = options.amount || expenseToUpdate['amount'];
+            expenseToUpdate['category'] = options.category || expenseToUpdate['category'];
             expenses[expenseIndex] = expenseToUpdate;
         }
 
@@ -123,8 +125,9 @@ program.command('list')
         // Read the file and parse the JSON content
         let expenses = getExpenses();
 
+        console.log(category);
         if (category) {
-            expenses = expenses.filter(expense => expense.category.toLowerCase() === category.toLowerCase())
+            expenses = expenses.filter(expense => expense.category.toUpperCase() === category.toUpperCase())
                         .map(expense => {
                             return {
                                 ID: expense.id,
@@ -146,7 +149,7 @@ program.command('list')
             })
         }
         
-        console.table(expenses, ['ID', 'Date', 'Description', 'Amount']);
+        console.table(expenses, ['ID', 'Date', 'Description', 'Amount', 'Category']);
     });
 
 // Define the 'summary' command

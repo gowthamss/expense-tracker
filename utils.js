@@ -1,12 +1,8 @@
 import { expenseCategories } from './model.js';
 
 export const validateExpenseName = (name) => {
-    if (typeof name !== 'string' || name.length === 0) {
+    if (name !== undefined && (typeof name !== 'string' || name.length === 0)) {
         returnError('Expense name must be a non-empty string');
-    }
-
-    if (name.startsWith('-')) {
-        returnError('Please provide a valid expense name');
     }
 };
 
@@ -17,7 +13,9 @@ export const validateExpenseId = (id) => {
 };
 
 export const validateAmount = (amount) => {
-    if (typeof parseInt(amount) !== 'number' || parseInt(amount) <= 0) {
+    const amountInt = parseInt(amount);
+
+    if (isNaN(amountInt) || amountInt <= 0 || !/^\d+$/.test(amount.toString())) {
         returnError('Amount must be a positive number');
     }
 };
